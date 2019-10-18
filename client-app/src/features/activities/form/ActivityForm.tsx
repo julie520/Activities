@@ -1,7 +1,12 @@
 import React from 'react'
 import { Segment, Form } from 'semantic-ui-react'
+import { IActivity } from '../../../app/models/activity'
 
-const ActivityForm = () => {
+interface IProps {
+  activity: IActivity | undefined
+}
+
+const ActivityForm: React.FC<IProps> = ({ activity }) => {
   return (
     <Segment>
       <Form>
