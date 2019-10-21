@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Card, Image, Button, Grid, Segment, Item, Header } from 'semantic-ui-react'
+import { Image, Button, Grid, Segment, Item, Header } from 'semantic-ui-react'
 import ActivityStore from "../../../app/store/activityStore"
 import { observer } from 'mobx-react-lite'
 import { RouteComponentProps } from 'react-router'
