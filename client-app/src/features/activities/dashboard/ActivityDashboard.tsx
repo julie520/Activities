@@ -2,18 +2,19 @@ import React, { useContext, useEffect } from 'react'
 import { Grid } from 'semantic-ui-react'
 import ActivityList from './ActivityList'
 import { observer } from 'mobx-react-lite'
-import ACtivityStore from "../../../app/store/activityStore"
 import LoadingComponent from '../../../app/layout/LoadingComponent'
+import { RootStoreContext } from '../../../app/store/rootStore'
 
 
 const ActivityDashboard = () => {
-    const activityStore = useContext(ACtivityStore)
+    const rootStore = useContext(RootStoreContext);
+    const {loadActivities, loadingInitial } = rootStore.activityStore;
 
     useEffect(() => {
-        activityStore.loadActivities();
-    }, [activityStore])
+        loadActivities();
+    }, [loadActivities])
 
-    if (activityStore.loadingInitial)
+    if (loadingInitial)
         return <LoadingComponent content='Loading Activity' />
 
     return (
