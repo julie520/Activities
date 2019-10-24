@@ -6,6 +6,7 @@ import LoadingComponent from '../../../app/layout/LoadingComponent'
 import { Link } from 'react-router-dom'
 import { format } from "date-fns"
 import { RootStoreContext } from '../../../app/store/rootStore'
+import ActivityDetailedSidebar from './ActivityDetailedSidebar'
 
 
 const activityImageStyle = {
@@ -27,13 +28,15 @@ interface DetailParams {
 
 const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match }) => {
     const rootStore = useContext(RootStoreContext)
-    const { activity, loadActivity, loadingInitial } = rootStore.activityStore
+    const { activity, loadActivity, loadingInitial, attendActivity, cancelAttendence, loading } = rootStore.activityStore
 
     useEffect(() => {
         loadActivity(match.params.id)
     }, [loadActivity, match.params.id])
 
     if (loadingInitial || !activity) return <LoadingComponent content="Loading activity..." />
+
+    const host = activity.attendees.filter(x => x.isHost)[0];
 
     return (
         <Grid>
@@ -49,16 +52,19 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match })
                                     <Header size='huge' content={activity.title} style={{ color: 'white' }} />
                                     <p>{format(activity.date, 'eeee do MMMM')}</p>
                                     <p>
-                                        Hosted by <strong>Bob</strong>
+                                        Hosted by <strong>{host.displayName}</strong>
                                     </p>
                                 </Item.Content>
                             </Item>
                         </Item.Group>
                     </Segment>
                     <Segment clearing attached='bottom'>
-                        <Button color='teal'>Join Activity</Button>
-                        <Button>Cancel attendence</Button>
-                        <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>Manage Event</Button>
+                        {activity.isHost ? (
+                            <Button as={Link} to={`/manage/${activity.id}`} color='orange' floated='right'>Manage Event</Button>
+                        ) : activity.isGoing ? (
+                            <Button loading={loading} onClick={cancelAttendence}>Cancel attendence</Button>
+                        ) : <Button loading={loading} onClick={attendActivity} color='teal'>Join Activity</Button>}
+                        
                     </Segment>
                 </Segment.Group>
                 <Segment.Group>
@@ -136,7 +142,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match })
                 </Fragment>
             </Grid.Column>
             <Grid.Column width={6}>
-                <h2>Sidebar here</h2>
+                <ActivityDetailedSidebar attendees={activity.attendees} />
             </Grid.Column>
         </Grid>
 
