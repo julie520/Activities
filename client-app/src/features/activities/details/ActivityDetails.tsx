@@ -52,7 +52,7 @@ const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match })
                                     <Header size='huge' content={activity.title} style={{ color: 'white' }} />
                                     <p>{format(activity.date, 'eeee do MMMM')}</p>
                                     <p>
-                                        Hosted by <strong>{host.displayName}</strong>
+                                        Hosted by <Link to={`/profile/${host.username}`}><strong>{host.displayName}</strong></Link>
                                     </p>
                                 </Item.Content>
                             </Item>
